@@ -3,14 +3,10 @@ package com.example.tourdefrance
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import kotlinx.android.synthetic.main.activity_main.*
 import java.time.LocalDate
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +14,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val todayStage = DateToStage.dateToStage[LocalDate.now()]
+        if(todayStage == null)
+            Toast.makeText(applicationContext, "Today is rest day", Toast.LENGTH_SHORT).show()
         stage.setText(todayStage?.toString())
         viewProfileButton.setOnClickListener{
             if(stage.text.isNotEmpty()){
@@ -27,8 +25,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Stage must not be empty", Toast.LENGTH_SHORT).show()
             }
         }
-        openRaceCenterButton.setOnClickListener{
+        raceCenterButton.setOnClickListener{
             openRaceCenter();
+        }
+        rankingsButton.setOnClickListener {
+            openRankings();
         }
         tdfImage.setOnClickListener{
             openPrincipal()
@@ -41,6 +42,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun openRaceCenter(){
         openUri("https://racecenter.letour.fr/fr/")
+    }
+
+    private fun openRankings(){
+        openUri("https://www.letour.fr/fr/classements")
     }
 
     private fun openStageProfile(stage: Int){
